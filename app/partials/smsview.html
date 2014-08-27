@@ -1,0 +1,50 @@
+﻿<!-- If model.errorMessage is defined, then render the error div -->
+<div class="alert alert-danger alert-dismissable" style="margin-top: 30px;" ng-show="model.errorMessage != undefined">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+    <strong>Error!</strong>
+    <br />
+    {{ model.errorMessage }}
+</div>
+<!-- The input fields bound to the model -->
+<div class="well" style="margin-top: 30px;">
+    <table style="width: 100%;">
+        <tr>
+            <td style="width: 45%; text-align: center;">
+                <input type="text" placeholder="Phone number (eg; +44 7778 609466)" ng-model="model.phoneNumber" class="form-control" style="width: 90%" onkeypress="return checkPhoneInput();" />
+            </td>
+            <td style="width: 45%; text-align: center;">
+                <input type="text" placeholder="Message" ng-model="model.message" class="form-control" style="width: 90%" />
+            </td>
+            <td style="text-align: center;">
+                <button class="btn btn-danger" ng-click="sendMessage();" ng-disabled="model.isAjaxInProgress" style="margin-right: 5px;">Send</button>
+                <img src="/Content/ajax-loader.gif" ng-show="model.isAjaxInProgress" />
+            </td>
+        </tr>
+    </table>
+</div>
+<!-- The past messages -->
+<div style="margin-top: 30px;">
+    <!-- The following div is shown if there are no past messages -->
+    <div ng-show="model.allMessages.length == 0">
+        No messages have been sent yet!
+    </div>
+    <!-- The following div is shown if there are some past messages -->
+    <div ng-show="model.allMessages.length > 0">
+        <table style="width: 100%;" class="table table-striped">
+            <tr>
+                <td>Phone Number</td>
+                <td>Message</td>
+                <td></td>
+            </tr>
+            <!-- The ng-repeat directive is line the repeater control in .NET, but as you can see
+                   this partial is pure HTML which is much cleaner -->
+            <tr ng-repeat="message in model.allMessages">
+                <td>{{ message.to }}</td>
+                <td>{{ message.message }}</td>
+                <td>
+                    <button class="btn btn-danger" ng-click="delete(message.smsId);" ng-disabled="model.isAjaxInProgress">Delete</button>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
